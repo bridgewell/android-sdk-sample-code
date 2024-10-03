@@ -1,7 +1,7 @@
 
 # Bridgewell SDK for Android
 
-[Versioning Document](VERSIONING.md)
+[Links to the full documentation](https://github.com/bridgewell/Android-SDK/blob/main/README.md)
 
 **Version: 1.0**
 
@@ -9,15 +9,12 @@
 
 ## Table of Contents
 
-- [Revision History](#revision-history)
 - [Requirements](#requirements)
-- [How to Build the Project](#how-to-build-the-project)
 - [General Setup](#general-setup)
-    - [1. SDK Integration](#1-sdk-integration)
+    - [1. SDK installation](#1-sdk-integration)
         - [a. Maven Central (Recommended)](#a-maven-central-recommended)
-        - [b. Local Maven](#b-local-maven)
-        - [c. File .aar (Alternative)](#b-file-aar-alternative)
-    - [2. Setting Up the SDK](#2-setting-up-the-sdk)
+        - [b. File .aar (Alternative)](#b-file-aar-alternative)
+    - [2. SDK initialization](#2-setting-up-the-sdk)
         - [a. Set BW Server](#a-set-bw-server)
         - [b. Initialize SDK](#b-initialize-sdk)
     - [3. Update Your Android Manifest](#3-update-your-android-manifest)
@@ -27,60 +24,33 @@
     - [5. Host](#5-host)
     - [6. Timeout](#6-timeout)
     - [7. Creative Factory Timeout](#7-creative-factory-timeout)
-    - [8. Share Geolocation](#8-share-geolocation)
     - [9. In-App Browsers](#9-in-app-browsers)
 - [Ad Setup](#ad-setup)
     - [1. Custom Bidding Integration](#1-custom-bidding-integration)
-        - [a. Display Banner](#a-display-banner)
-        - [b. Display Video](#b-display-video)
-        - [c. Interstitial Banner](#c-interstitial-banner)
-        - [d. Interstitial Video](#d-interstitial-video)
-        - [e. Native](#e-native)
-        - [f. Sticky Banner](#f-sticky-banner)
+        - [a. In-app banner ad implementation](#a-display-banner)
+        - [b. In-app Sticky Bottom-Right ad implementation](#b-display-video)
+        - [c. WebView API usage](#c-interstitial-banner)
 - [About](#about)
 
-## Revision History
-
-<a id="revision-history"></a>
-
-| Date       | Version | Description   | Author        |
-| :--------- | :---- | :------------ | :----------- |
-| 2024-02-20 | 1.0    | Initial Release | Hoang Chung  |
-| 2024-07-24 | 1.0.1  | Minor bug fixes and documentation improvements | Kai       |
-
-## Requirements
 
 <a id="requirements"></a>
+## Requirements
 
-- Android 7.0 (SDK version 24) or newer
+
+- Android 8.0 (SDK version 26) or newer
 - Mobile phone with Google Play Services
 - Android Studio 2023.3.1 or newer
 - Gradle 8.2 or newer
 
-## How to Build the Project
-
-<a id="how-to-build-the-project"></a>
-
-1. **Clone:** Clone this repository to your computer.
-2. **JAVA_HOME:** Ensure that the `JAVA_HOME` environment variable is set correctly.
-3. **Build:** Open a terminal and run the following command:
-
-   ```shell
-   gradlew clean :bwmobile:assembleRelease
-   ```
-
 <br>
 
 <a id="general-setup"></a>
-
 # General setup
 
 <a id="1-sdk-integration"></a>
-
 ### 1. SDK Integration
 
 <a id="a-maven-central-recommended"></a>
-
 #### a. Maven Central (Recommended)
 
 Manually:
@@ -118,7 +88,6 @@ The SDK will be built and published automatically.
 ------------
 
 <a id="b-local-maven"></a>
-
 #### b. Local Maven
 
 **1. Build**: Build the library to generate an AAR file
@@ -157,9 +126,9 @@ dependencyResolutionManagement {
 
 ------------
 
-#### c. File .aar (Alternative)
-
 <a id="b-file-aar-alternative"></a>
+#### b. File .aar (Alternative)
+
 
 1. **Download**: Go to the Actions tab on this repository.
 2. **Choose Commit**: Select the commit you want to download from.
@@ -185,13 +154,11 @@ dependencyResolutionManagement {
 
 ------------
 
+<a id="2-setting-up-the-sdk"></a>
 ### 2. Setting Up the SDK
 
-<a id="2-setting-up-the-sdk"></a>
-
-#### a. Set BW Server
-
 <a id="a-set-bw-server"></a>
+#### a. Set BW Server
 
 Once you have a Bw server, you will add them to BW mobile. For example, if you’re using the Rubicon Server.
 
@@ -211,9 +178,8 @@ BWMobile.getInstance().setHostServer(HostServer.Custom("YOUR_CUSTOM_HOST_SERVER"
 
 ------------
 
-#### b. Initialize SDK
-
 <a id="b-initial-sdk"></a>
+#### b. Initialize SDK
 
 After you have an account id and host server. You should initialize BW Sdk like this
 
@@ -243,25 +209,34 @@ BWMobile.getInstance().setEndPoint("YOUR_END_POINT")
 quest to the /status endpoint. If you use a custom host you should provide a custom status endpoint
 
 ------------
-
+<a id="3-update-your-android-manifest"></a>
 ### 3. Update your Android manifest
 
-<a id="3-update-your-android-manifest"></a>
 
+<a id="a-declare-permissions"></a>
 ### a. Declare some permissions
+#a-declare-permissions
 
-<a id="declare-some-permissions"></a>
 
 Before you start, you need to integrate the SDK by updating your Android manifest.
 
 ```xml
-<uses-permission android:name="android.permission.INTERNET" />
-<uses-permission android:name="com.google.android.gms.permission.AD_ID"/>
-
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
 ```
 
 ``` ACCESS_COARSE_LOCATION ``` and ``` ACCESS_FINE_LOCATION ``` will automatically allow the device to send user location for targeting, which can help increase revenue by increasing the value of impressions to buyers.
 
+
+<a id="sdk-configuration"></a>
+# SDK Configuration
+
+<a id="4-account-id"></a>
 ## 4. Account ID
 
 String containing the BW Server account ID.
@@ -271,6 +246,7 @@ BWMobile.getInstance().setAccountId("YOUR_ACCOUNT_ID")
 val accountId = BWMobile.getInstance().getAccountId()
 ```
 
+<a id="5-host"></a>
 ## 5. Host
 
 Object containing configuration for your Bw Server host with which the Bw SDK will communicate. Choose from the system-defined Bw Server hosts or define your own custom Bw Server host
@@ -281,6 +257,7 @@ BWMobile.getInstance().setHostServer(host)
 
 `host` should be `HostServer.RUBICON`, `HostServer.RUBICON` or `HostServer.Custom("YOUR_CUSTOM_HOST_SERVER")`
 
+<a id="6-timeout"></a>
 ## 6. Timeout
 
 The Bw timeout set in milliseconds, will return control to the ad server SDK to fetch an ad once the expiration period is achieved. Because Bw SDK solicits bids from Bw Server in one payload, setting Bw timeout too low can stymie all demand resulting in a potential negative revenue impact.
@@ -290,6 +267,7 @@ BWMobile.getInstance().setTimeoutMilliseconds(30_000)
 val timeout = BWMobile.getInstance().getTimeoutMilliseconds()
 ```
 
+<a id="7-creative-factory-timeout"></a>
 ## 7. Creative Factory Timeout
 
 Indicates how long each creative has to load before it is considered a failure.
@@ -301,6 +279,7 @@ val creativeTimeout = BWMobile.getInstance().getCreativeFactoryTimeout()
 
 The creativeFactoryTimeoutPreRenderContent controls the timeout for video and interstitial ads. The creativeFactoryTimeout is used for HTML banner ads.
 
+<a id="8-sharegeolocation"></a>
 ## 8. ShareGeoLocation
 
 If this flag is True AND the app collects the user’s geographical location data, BW Mobile will send the user’s geographical location data to BW Server. If this flag is False OR the app does not collect the user’s geographical location data, BW Mobile will not populate any user geographical location information in the call to BW Server.
@@ -310,13 +289,14 @@ BWMobile.getInstance().setShareGeoLocation(true)
 val isShareGeoLocation = BWMobile.getInstance().getShareGeoLocation()
 ```
 
+<a id="9-in-app-browsers"></a>
 ## 9. In-app Browsers
 
 Obtain device information and make it available in the WebView interface.
 
 ### Prerequisites
 
-- Declare the permissions mentioned in [3.a](#declare-some-permissions)
+- Declare the permissions mentioned in [3.a](#a-declare-permissions)
 
 ### Register the web view
 
@@ -344,18 +324,16 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
 <br><br>
 
+<a id="ad-setup"></a>
 # Ad setup
 
-<a id="ad-setup"></a>
-
+<a id="1-custom-bidding-integration"></a>
 ## 1. Custom Bidding Integration
 
-<a id="1-custom-bidding-integration"></a>
 
 You can use BW SDK to monetize your app with a custom ad server or even without it. Use the `InAppApi` to obtain the targeting keywords for following usage with the custom ad server and display the winning bid without the primary ad server and its SDK.
 
 <a id="a-display-banner"></a>
-
 ### a. Display banner
 
 Sample
@@ -414,9 +392,9 @@ You also need pass some necessary parameters to createDisplayBannerAd() function
 
 <br>
 
+<a id="b-display-video"></a>
 ### b. Display video
 
-<a id="b-display-video"></a>
 
 Sample:
 
@@ -743,9 +721,6 @@ private fun inflateView(ad: PrebidNativeAd) {
 
 <u>Note</u>: For more detail of the configuration of native impls, please check this documentation: <https://www.iab.com/wp-content/uploads/2018/03/OpenRTB-Native-Ads-Specification-Final-1.2.pdf>
 
-## 2. Updating
-
-<br><br>
 
 # About
 

@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="0dp"
-        android:background="@color/gray" />
+    tools:context=".activity.MainActivity">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:background="@color/white"
-        android:id="@+id/rvAdTypes"
-        android:layout_width="match_parent"
+        android:id="@+id/rv_list"
+        android:layout_marginTop="100dp"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
-        android:layout_weight="1" />
-</LinearLayout>
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    tools:listitem="@layout/list_item_ad_type"
+    />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
