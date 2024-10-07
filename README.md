@@ -20,16 +20,13 @@
     - [3. Update Your Android Manifest](#3-update-your-android-manifest)
         - [a. Declare Permissions](#a-declare-permissions)
 - [SDK Configuration](#sdk-configuration)
-    - [4. Account ID](#4-account-id)
-    - [5. Host](#5-host)
-    - [6. Timeout](#6-timeout)
-    - [7. Creative Factory Timeout](#7-creative-factory-timeout)
-    - [9. In-App Browsers](#9-in-app-browsers)
+    - [1. ShareGeoLocation](#1-sharegeolocation)
+    - [2. In-App Browsers](#2-in-app-browsers)
 - [Ad Setup](#ad-setup)
     - [1. Custom Bidding Integration](#1-custom-bidding-integration)
         - [a. In-app banner ad implementation](#a-display-banner)
-        - [b. In-app Sticky Bottom-Right ad implementation](#b-display-video)
-        - [c. WebView API usage](#c-interstitial-banner)
+        - [b. In-app Sticky Bottom-Right ad implementation](#b-sticky-banner)
+        - [c. WebView API usage](#c-web-view-api-usage)
 - [About](#about)
 
 
@@ -53,89 +50,18 @@
 <a id="a-maven-central-recommended"></a>
 #### a. Maven Central (Recommended)
 
-Manually:
+Add the dependency:
 
-- In your project’s settings.gradle file, change `DISTRIBUTION_TYPE_MAVEN_CENTRAL` to `true`
-- Add these corresponding variables to `gradle.properties`
-
-```
-    mavenCentralUsername=example_user // Maven central generated userID
-    mavenCentralPassword=example_password // Maven central generated passphrase
-    signing.keyId=ABC12345 // Last 8 digits of your gpg public key
-    signing.password=123456 // password for secret gpg key
-    signing.secretKeyRingFile=/Users/folder/secret.gpg // path to gpg key file
-```
-
-- In build.gradle.kts, set `RELEASE_TAG_NAME` to your preferred version string.
-- Comment out these variables as they are used in CI.
-
-```
-val ORG_GRADLE_PROJECT_mavenCentralUsername = System.getenv("MAVEN_USER_NAME")
-val ORG_GRADLE_PROJECT_mavenCentralPassword = System.getenv("MAVEN_PASSWORD")
-val ORG_GRADLE_PROJECT_signingInMemoryKey = System.getenv("MY_API_KEY")
-val ORG_GRADLE_PROJECT_signingInMemoryKeyId = System.getenv("OSS_SIGNING_KEY_ID")
-val ORG_GRADLE_PROJECT_signingInMemoryKeyPassword = System.getenv("OSS_SIGNING_PASSWORD")
-```
-
-- Then, run the following command:
-
-```
-./gradlew publishAndReleaseToMavenCentral --no-configuration-cache
-```
-
-The SDK will be built and published automatically.
-
-------------
-
-<a id="b-local-maven"></a>
-#### b. Local Maven
-
-**1. Build**: Build the library to generate an AAR file
-
-- In your project’s settings.gradle file, change `DISTRIBUTION_TYPE_MAVEN_CENTRAL` to `false`
-- Then, run the following command:
-
-```
-./gradlew buildAllLibraries
-```
-
-**2. Publish:** Publish the AAR file to your local Maven repository
-
-```
-./gradlew publishAllLibraries
-```
-
-You can copy the maven-local folder to the root folder of your other project(s).
-
-**3. Update settings.gradle:** : Add the following to the `dependencyResolutionManagement` section of the project's `settings.gradle` file:
-
-```
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenCentral()
-        jcenter() // Warning: this repository is going to shut down soon
-        maven { url "https://jitpack.io" }
-        maven {
-            url uri('maven-local')
-        }
-    }
+```gradle
+dependencies {
+	implementation("com.bridgewell:bwmobile:1.3.0")
 }
 ```
-
-------------
 
 <a id="b-file-aar-alternative"></a>
 #### b. File .aar (Alternative)
 
-
-1. **Download**: Go to the Actions tab on this repository.
-2. **Choose Commit**: Select the commit you want to download from.
-3. **Artifacts**: Go to the Artifacts section.
-4. **Download**: Download the `.aar` file.
-
-**Importing the .aar File:**
+**Importing the .aar file:**
 
 1. **Copy**: Place the `.aar` file into your project's app/libs folder. /Path/to/your/project/app/libs/bwmobile.aar
 2. **Dependency**: Add this to your app's `build.gradle` file:
@@ -143,10 +69,8 @@ dependencyResolutionManagement {
 
    ```gradle
    dependencies {
-    implementation fileTree(dir: "libs", include: ["*.jar", "*.aar"])
-    implementation files('libs/bwmobile.aar')
-    //if you setup maven local or publish maven
-    implementation ("com.bridgewell.bwmobile:bwmobile:1.0.0@aar")
+   	implementation fileTree(dir: "libs", include: ["*.jar", "*.aar"])
+   	implementation files('libs/bwmobile.aar')
    }
    ```
 
@@ -163,18 +87,12 @@ dependencyResolutionManagement {
 Once you have a Bw server, you will add them to BW mobile. For example, if you’re using the Rubicon Server.
 
 ```kotlin
-BWMobile.getInstance().setAccountId("YOUR_ACCOUNT_ID") 
-BWMobile.getInstance().setHostServer(HostServer.RUBICON)
-BWMobile.getInstance().setLoggable(true) // Enable logging (optional)
+BWMobile.getInstance().setAccountId("YOUR_ACCOUNT_ID")
+BWMobile.getInstance().setHostServer("YOUR_HOST_SERVER")
 ```
 
-Or you can pass other values like ```Host.APPNEXUS``` and If you have opted to host your own Bw Server solution you will need to store the url to the server in your app. Make sure that your URL points to the /openrtb2/auction endpoint.
+Or you can pass other values like ```Host.APPNEXUS``` and If you have opted to host your own BW Server solution you will need to store the url to the server in your app. Make sure that your URL points to the /openrtb2/auction endpoint.
 
-setLoggable(true) set show log in library and send log to server prebid
-
-```kotlin
-BWMobile.getInstance().setHostServer(HostServer.Custom("YOUR_CUSTOM_HOST_SERVER"))
-```
 
 ------------
 
@@ -187,26 +105,17 @@ After you have an account id and host server. You should initialize BW Sdk like 
 BWMobile.getInstance().initialize(
    context,
    object : OnInitializationListener {
-
-
-       override fun onSuccess(hasWarningPBS: Boolean) {   
+       override fun onSuccess(hasWarningPBS: Boolean) {
+			// Called when the SDK is initialized successfully
        }
 
-
        override fun onFailed(msg: String) {
+			// Called if the SDK initialization fails
        }
    }
 )
 
 ```
-
-During the initialization, SDK creates internal classes and performs the health check request to the /status endpoint. If you use a custom host you should provide a custom status endpoint as well:
-
-```kotlin
-BWMobile.getInstance().setEndPoint("YOUR_END_POINT")
-```
-
-quest to the /status endpoint. If you use a custom host you should provide a custom status endpoint
 
 ------------
 <a id="3-update-your-android-manifest"></a>
@@ -214,9 +123,7 @@ quest to the /status endpoint. If you use a custom host you should provide a cus
 
 
 <a id="a-declare-permissions"></a>
-### a. Declare some permissions
-#a-declare-permissions
-
+### Declare some permissions
 
 Before you start, you need to integrate the SDK by updating your Android manifest.
 
@@ -235,52 +142,8 @@ Before you start, you need to integrate the SDK by updating your Android manifes
 
 <a id="sdk-configuration"></a>
 # SDK Configuration
-
-<a id="4-account-id"></a>
-## 4. Account ID
-
-String containing the BW Server account ID.
-
-```kotlin
-BWMobile.getInstance().setAccountId("YOUR_ACCOUNT_ID")
-val accountId = BWMobile.getInstance().getAccountId()
-```
-
-<a id="5-host"></a>
-## 5. Host
-
-Object containing configuration for your Bw Server host with which the Bw SDK will communicate. Choose from the system-defined Bw Server hosts or define your own custom Bw Server host
-
-```kotlin
-BWMobile.getInstance().setHostServer(host)
-```
-
-`host` should be `HostServer.RUBICON`, `HostServer.RUBICON` or `HostServer.Custom("YOUR_CUSTOM_HOST_SERVER")`
-
-<a id="6-timeout"></a>
-## 6. Timeout
-
-The Bw timeout set in milliseconds, will return control to the ad server SDK to fetch an ad once the expiration period is achieved. Because Bw SDK solicits bids from Bw Server in one payload, setting Bw timeout too low can stymie all demand resulting in a potential negative revenue impact.
-
-```kotlin
-BWMobile.getInstance().setTimeoutMilliseconds(30_000)
-val timeout = BWMobile.getInstance().getTimeoutMilliseconds()
-```
-
-<a id="7-creative-factory-timeout"></a>
-## 7. Creative Factory Timeout
-
-Indicates how long each creative has to load before it is considered a failure.
-
-```kotlin
-BWMobile.getInstance().setCreativeFactoryTimeout(8_000)
-val creativeTimeout = BWMobile.getInstance().getCreativeFactoryTimeout()
-```
-
-The creativeFactoryTimeoutPreRenderContent controls the timeout for video and interstitial ads. The creativeFactoryTimeout is used for HTML banner ads.
-
-<a id="8-sharegeolocation"></a>
-## 8. ShareGeoLocation
+<a id="1-sharegeolocation"></a>
+## 1. ShareGeoLocation
 
 If this flag is True AND the app collects the user’s geographical location data, BW Mobile will send the user’s geographical location data to BW Server. If this flag is False OR the app does not collect the user’s geographical location data, BW Mobile will not populate any user geographical location information in the call to BW Server.
 
@@ -289,14 +152,14 @@ BWMobile.getInstance().setShareGeoLocation(true)
 val isShareGeoLocation = BWMobile.getInstance().getShareGeoLocation()
 ```
 
-<a id="9-in-app-browsers"></a>
-## 9. In-app Browsers
+<a id="2-in-app-browsers"></a>
+## 2. In-app Browsers
 
 Obtain device information and make it available in the WebView interface.
 
 ### Prerequisites
 
-- Declare the permissions mentioned in [3.a](#a-declare-permissions)
+- Declare the permissions mentioned in [3](#a-declare-permissions)
 
 ### Register the web view
 
@@ -316,7 +179,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
    // Register the web view.
    BWMobile.getInstance().registerWebView(webView)
-   
+
    adWrapperView.addView(webView)
    webView.loadUrl(URL)
 }
@@ -347,10 +210,10 @@ adApi.createDisplayBannerAd(
    context = context,
    viewPager = yourViewPager, // optional
    model = DisplayBannerModel(
-       configId = "prebid-demo-mraid-expand-1-part",
+       configId = CONFIG_ID,
        width = 300,
-       height = 250,
-       refreshTimeSeconds = 35_000
+       height = 300,
+       refreshTimeSeconds = 300
    ),
    viewContainer = viewContainer,
    listener = object: BannerAdListener {
@@ -392,151 +255,9 @@ You also need pass some necessary parameters to createDisplayBannerAd() function
 
 <br>
 
-<a id="b-display-video"></a>
-### b. Display video
 
-
-Sample:
-
-```kotlin
-// Create an instance of InAppApi
-private var inAppApi: InAppApi = InAppApi()
-
-inAppApi.createDisplayBannerAd(
-    this,
-    model = DisplayVideoModel(
-        configId = CONFIG_ID,
-        width = WIDTH,
-        height = HEIGHT,
-        refreshTimeSeconds = refreshTimeSeconds
-    ),
-    viewContainer = adWrapperView,
-    listener = object: BannerAdListener {
-        override fun onAdStartLoad(bannerView: BannerView?) {}
-
-        override fun onAdLoaded(bannerView: BannerView?) {}
-
-        override fun onAdDisplayed(bannerView: BannerView?) {}
-
-        override fun onAdFailed(bannerView: BannerView?, exception: AdException?) {}
-
-        override fun onAdClicked(bannerView: BannerView?) {}
-
-        override fun onAdClosed(bannerView: BannerView?) {}
-
-    }
-)
-
-
-```
-
-| Parameter      | Explain | Detail     |
-| :---           | :----   | :---       |
-| context        | Instance of Context | - |
-| model        | object DisplayVideoModel, include necessary informations to generate the ad | `ConfigId`: an ID of a Stored Impression on the Bw server  <br>  `refreshTimeSeconds`: refresh time for each fetchDemand call in milisecond <br> `width`: width of the ad <br>  `Height`: height of the ad   |
-| viewContainer        | which view will be add the ad into | - |
-| listener        | register a callback as interface BannerAdListener to listener | `onAdStartLoad` <br> `onAdLoaded` <br> `onAdDisplayed` <br> `onAdFailed` <br> `onAdClicked` <br> `onAdClosed` |
-
-<a id="c-interstitial-banner"></a>
-### c. Interstitial banner
-
-
-#### Sample
-
-```kotlin
-// Create an instance of InAppApi
-private var adApi: InAppApi = InAppApi()
-
-
-// perform to fetch and load ad
-adApi.createInterstitialBannerAd(
-   this,
-   model = InterstitialBannerModel(
-       configId = "prebid-demo-display-interstitial-320-480",
-   ),
-   listener = object: InterstitialAdListener {
-       override fun onAdLoaded(interstitialAdUnit: InterstitialAdUnit?) {}
-
-
-       override fun onAdDisplayed(interstitialAdUnit: InterstitialAdUnit?) {}
-
-
-       override fun onAdFailed(interstitialAdUnit: InterstitialAdUnit?, e: AdException?) {}
-
-
-       override fun onAdClicked(interstitialAdUnit: InterstitialAdUnit?) {}
-
-
-       override fun onAdClosed(interstitialAdUnit: InterstitialAdUnit?) {}
-   }
-)
-```
-
-| Parameter      | Explain | Detail     |
-| :---        |    :----   |         :--- |
-| context      | Instance of Context        |  -  |
-| model   | Include necessary informations to generate the ad | `ConfigId`: an ID of a Stored Impression on the Bw server  <br>  `refreshTimeSeconds`: refresh time for each fetchDemand call in milisecond <br> `width`: width of the ad <br>  `Height`: height of the ad  |
-| viewContainer | which view will be add the ad into | - |
-| listener | register a callback as interface BannerAdListener to listener | - |
-
-<a id="d-interstitial-video"></a>
-### d. Interstital video
-
-#### Sample
-
-```kotlin
-// Create an instance of InAppApi
-private var adApi: InAppApi = InAppApi()
-
-inAppApi.createInterstitialVideoAd(
-    context = this,
-    model = InterstitialBannerModel(
-        configId = CONFIG_ID
-    ),
-    listener = object: InterstitialAdListener {
-        override fun onAdLoaded(interstitialAdUnit: InterstitialAdUnit?) {}
-
-        override fun onAdDisplayed(interstitialAdUnit: InterstitialAdUnit?) {}
-
-        override fun onAdFailed(interstitialAdUnit: InterstitialAdUnit?, e: AdException?) {}
-
-        override fun onAdClicked(interstitialAdUnit: InterstitialAdUnit?) {}
-
-        override fun onAdClosed(interstitialAdUnit: InterstitialAdUnit?) {}
-    }
-)
-```
-
-| Parameter      | Explain | Detail     |
-| :---        |    :----   |         :--- |
-| context      | Instance of Context        |  -  |
-| model   | object InterstitialBannerModel, include necessary informations to generate the ad | `ConfigId`: an ID of a Stored Impression on the Bw server  <br>  `minWidthPerc`: [optional] width of the ad <br>  `minHeightPerc`: [optional] height of the ad  |
-| listener | register a callback as interface InterstitialAdListener to listener | - |
-
-<a id="e-native"></a>
-### e. Native
-
-#### Sample
-
-```kotlin
-// Create an instance of InAppApi
-private var adApi: InAppApi = InAppApi()
-
-// Create native ad
-inAppApi.createNativeAd(
-    model =
-        InAppNativeModel(
-            configId = CONFIG_ID,
-            configModel = getConfigNativeModel(),
-        ),
-    onInflateNativeAd = {
-        inflateView(it)
-    },
-)
-```
-
-<a id="f-sticky-banner"></a>
-### f. Sticky banner
+<a id="b-sticky-banner"></a>
+### b. Sticky banner
 
 #### Sample
 
@@ -560,33 +281,17 @@ private fun createStickyAd() {
             ),
             listener =
             object : BannerAdListener {
-                override fun onAdStartLoad(bannerView: BannerView?) {
-                    showToast("onAdStartLoad")
-                }
+                override fun onAdStartLoad(bannerView: BannerView?) {}
 
-                override fun onAdLoaded(bannerView: BannerView?) {
-                    showToast("onAdLoaded")
-                }
+                override fun onAdLoaded(bannerView: BannerView?) {}
 
-                override fun onAdDisplayed(bannerView: BannerView?) {
-                    showToast("onAdDisplayed")
-                }
+                override fun onAdDisplayed(bannerView: BannerView?) {}
 
-                override fun onAdFailed(
-                    bannerView: BannerView?,
-                    exception: AdException?,
-                ) {
-                    showToast("onAdFailed ${exception?.message}")
-                    Timber.d("onAdFailed ${exception?.message}")
-                }
+                override fun onAdFailed(bannerView: BannerView?, exception: AdException?) {}
 
-                override fun onAdClicked(bannerView: BannerView?) {
-                    showToast("onAdClicked")
-                }
+                override fun onAdClicked(bannerView: BannerView?) {}
 
-                override fun onAdClosed(bannerView: BannerView?) {
-                    showToast("onAdClosed")
-                }
+                override fun onAdClosed(bannerView: BannerView?) {}
             },
     )
 }
@@ -599,7 +304,6 @@ You also need pass some necessary parameters to createDisplayBannerAd() function
 | Parameter      | Explain | Detail     |
 | :---        |    :----   |          :--- |
 | context      | Instance of Context        |  -  |
-| position      | Set the position of the sticky banner ad        |  BWStickyBannerPosition.CENTER<br>BWStickyBannerPosition.BOTTOM_END  |
 | model   | Include necessary informations to generate the ad | `ConfigId`: an ID of a Stored Impression on the Bw server  <br>  `refreshTimeSeconds`: refresh time for each fetchDemand call in milisecond <br> `width`: width of the ad <br>  `Height`: height of the ad  |
 | viewContainer | which view will be add the ad into | - |
 | listener | register a callback as interface BannerAdListener to listener | `onAdStartLoad` <br> `onAdLoaded` <br> `onAdDisplayed` <br> `onAdFailed` <br> `onAdClicked` <br> `onAdClosed` |
@@ -726,3 +430,4 @@ private fun inflateView(ad: PrebidNativeAd) {
 
 <a id="about"></a>
 Copyright 2019 Bridgewell | All Rights Reserved
+    
