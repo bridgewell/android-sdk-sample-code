@@ -39,6 +39,17 @@ android {
 }
 
 dependencies {
+    // Maven integration
+//    implementation(libs.bwmobile)
+
+    // Local .arr integration
+    implementation(files("libs/bwmobile.aar"))
+
+    // Additional dependencies
+    implementation(libs.gson)
+    implementation(libs.rxjava)
+    implementation(libs.rxpermissions)
+    implementation(libs.play.services.ads)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

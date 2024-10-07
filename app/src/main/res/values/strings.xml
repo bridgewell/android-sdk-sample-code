@@ -3,4 +3,8 @@
     <string name="in_app_banner_ad_implementation">In-app banner ad</string>
     <string name="in_app_sticky_bottom_right_ad_implementation">In-app Sticky Bottom-Right ad</string>
     <string name="web_view_api_usage">WebView API usage</string>
+    <string name="button_load_banner">Load banner ad</string>
+    <string name="button_load_sticky_banner">Load sticky bottom banner</string>
+    <string name="button_web_view_inject">WebView API usage</string>
+
 </resources>

@@ -16,6 +16,9 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+
+        // Add JitPack repository to access libraries hosted on JitPack
+        maven("https://jitpack.io")
     }
 }
 
