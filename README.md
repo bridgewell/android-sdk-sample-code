@@ -122,7 +122,7 @@ BWMobile.getInstance().initialize(
 ### 3. Update your Android manifest
 
 
-Before starting, integrate the SDK by updating your `AndroidManifest.xml` with the following permissions:
+1. Before starting, integrate the SDK by updating your `AndroidManifest.xml` with the following permissions:
 
 ```xml
     <uses-permission android:name="android.permission.INTERNET" />
@@ -137,6 +137,7 @@ Before starting, integrate the SDK by updating your `AndroidManifest.xml` with t
 *   `ACCESS_COARSE_LOCATION` and `ACCESS_FINE_LOCATION` allow the device to send user location data for ad targeting, which can increase revenue by making impressions more valuable to buyers.
 *   `READ_PHONE_STATE` allows the Web View API to collect device data. 
 
+2. Configure your app by following the instructions for the [Google Mobile Ads SDK](https://developers.google.com/admob/android/quick-start#import_the_mobile_ads_sdk).
 
 <a id="sdk-usage"></a>
 # SDK usage
