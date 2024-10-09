@@ -95,11 +95,11 @@ BWMobile.getInstance().initialize(
    context,
    object : OnInitializationListener {
        override fun onSuccess(hasWarningPBS: Boolean) {
-			// Called when the SDK is initialized successfully
+	// Called when the SDK is initialized successfully
        }
 
        override fun onFailed(msg: String) {
-			// Called if the SDK initialization fails
+	// Called if the SDK initialization fails
        }
    }
 )
@@ -173,7 +173,8 @@ override fun onCreate(savedInstanceState: Bundle?) {
    webView.loadUrl(URL)
 }
 ```
-<u><b>Result</b></u>:
+### Result:
+
 <img src="https://github.com/user-attachments/assets/2fddeea8-6dc8-468e-bda6-bc3580f943b9" width="336" height="748" alt="WebView">
 
 <a id="2-banner-ads"></a>
@@ -212,7 +213,8 @@ adApi.createDisplayBannerAd(
 )
 ```
 
-<u><b>Result</b></u>:
+### Result:
+
 <img src="https://github.com/user-attachments/assets/4a3a9d69-326f-4a41-84ac-b02ddd0cc3a8" width="336" height="748" alt="WebView">
 
 <br>
@@ -240,30 +242,29 @@ adApi.createDisplayBannerAd(
 // Create an instance of InAppApi
 val adApi: InAppApi = InAppApi()
 
-
 // perform to fetch and load ad
-inAppApi?.createStickyBannerAd(
-        this,
-        // Set the banner to bottom end of the screen
-        model =
-        DisplayBannerModel(
-            configId = CONFIG_ID,
-            width = 300,
-            height = 300,
-            refreshTimeSeconds = refreshTimeSeconds,
-        ),
-        listener =
-        object : BannerAdListener {
-            override fun onAdStartLoad(bannerView: BannerView?) {}
-            override fun onAdLoaded(bannerView: BannerView?) {}
-            override fun onAdDisplayed(bannerView: BannerView?) {}
-            override fun onAdFailed(bannerView: BannerView?, exception: AdException?) {}
-            override fun onAdClicked(bannerView: BannerView?) {}
-            override fun onAdClosed(bannerView: BannerView?) {}
-        },
+adApi.createStickyBannerAd(
+   context = context,
+   model = DisplayBannerModel(
+       configId = CONFIG_ID,
+       width = 300,
+       height = 300,
+       refreshTimeSeconds = 300
+   ),
+   viewContainer = viewContainer,
+   listener = object: BannerAdListener {
+       override fun onAdStartLoad(bannerView: BannerView?) {}
+       override fun onAdLoaded(bannerView: BannerView?) {}
+       override fun onAdDisplayed(bannerView: BannerView?) {}
+       override fun onAdFailed(bannerView: BannerView?, exception: AdException?) {}
+       override fun onAdClicked(bannerView: BannerView?) {}
+       override fun onAdClosed(bannerView: BannerView?) {}
+   }
 )
 ```
-<u><b>Result</b></u>:
+
+### Result:
+
 <img src="https://github.com/user-attachments/assets/4811afed-e814-49af-a2c6-cd3536a1a9ce" width="336" height="748" alt="WebView">
 
 
