@@ -176,7 +176,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 ```
 ### Result:
 
-<img src="https://github.com/user-attachments/assets/2fddeea8-6dc8-468e-bda6-bc3580f943b9" width="336" height="748" alt="WebView">
+<img src="https://github.com/user-attachments/assets/ece6e693-57f7-4c1b-b9f8-89a641b9f4bb" width="336" height="748" alt="WebView">
 
 <a id="2-banner-ads"></a>
 ## 2. Banner ads
