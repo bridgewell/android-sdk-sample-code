@@ -94,7 +94,7 @@ Once you have an account ID and host server, initialize the BW SDK as follows:
 BWMobile.getInstance().initialize(
    context,
    object : OnInitializationListener {
-       override fun onSuccess(hasWarningPBS: Boolean) {
+       override fun onSuccess() {
 	// Called when the SDK is initialized successfully
        }
 
@@ -155,7 +155,7 @@ This section explains how to obtain device information and make it available in 
 
 ```kotlin
 BWMobile.getInstance().setShareGeoLocation(true)
-BWMobile.getInstance().registerWebView(webView)
+BWMobile.getInstance().registerContentWebViewWithAdInfo(webView)
 ```
 
 This should be done as early as possible, such as in the onCreate() method of your MainActivity
@@ -168,7 +168,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
    BWMobile.getInstance().setShareGeoLocation(true)
 
    // Register the web view.
-   BWMobile.getInstance().registerWebView(webView)
+   BWMobile.getInstance().registerContentWebViewWithAdInfo(webView)
 
    adWrapperView.addView(webView)
    webView.loadUrl(URL)
@@ -176,7 +176,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 ```
 ### Result:
 
-<img src="https://github.com/user-attachments/assets/ece6e693-57f7-4c1b-b9f8-89a641b9f4bb" width="336" height="748" alt="WebView">
+<img src="https://github.com/user-attachments/assets/3ae1ea36-c394-416e-8bfd-1835083ddf0f" width="336" height="748" alt="WebView">
 
 <a id="2-banner-ads"></a>
 ## 2. Banner ads
@@ -193,7 +193,7 @@ You can use the BridgeWell SDK to monetize your app with a custom ad server or e
 val adApi: InAppApi = InAppApi()
 
 // perform to fetch and load ad
-adApi.createDisplayBannerAd(
+adApi.createBwsBannerAd(
    context = context,
    viewPager = yourViewPager, // optional
    model = DisplayBannerModel(
@@ -203,13 +203,13 @@ adApi.createDisplayBannerAd(
        refreshTimeSeconds = 300
    ),
    viewContainer = viewContainer,
-   listener = object: BannerAdListener {
-       override fun onAdStartLoad(bannerView: BannerView?) {}
-       override fun onAdLoaded(bannerView: BannerView?) {}
-       override fun onAdDisplayed(bannerView: BannerView?) {}
-       override fun onAdFailed(bannerView: BannerView?, exception: AdException?) {}
-       override fun onAdClicked(bannerView: BannerView?) {}
-       override fun onAdClosed(bannerView: BannerView?) {}
+   listener = object: BwsAdViewListener {
+       override fun onAdViewStartLoad(bannerView: BwsAdView?) {}
+       override fun onAdViewLoaded(bannerView: BwsAdView?) {}
+       override fun onAdViewDisplayed(bannerView: BwsAdView?) {}
+       override fun onAdViewFailed(bannerView: BwsAdView?, exception: AdException?) {}
+       override fun onAdViewClicked(bannerView: BwsAdView?) {}
+       override fun onAdViewClosed(bannerView: BannerView?) {}
    }
 )
 ```
@@ -229,7 +229,7 @@ adApi.createDisplayBannerAd(
 | viewPager      | The view pager contains the ad item |  [Optional]: Skip this parameter if you've already set `offscreenPageLimit` on your `ViewPager` or if your ad is not displayed inside a `ViewPager`.  |
 | model   | Contains information to generate the ad | `ConfigId`: an ID of a Stored Impression on the Bw server  <br>  `refreshTimeSeconds`: refresh time for each `fetchDemand` call in second <br> `width`: Width of the ad <br>  `Height`: Height of the ad  |
 | viewContainer | The view to which the ad will be added. | - |
-| listener | Callback listener (BannerAdListener) | `onAdStartLoad`: Called when the ad starts loading <br> `onAdLoaded`: Called when the ad is loaded successfully <br> `onAdDisplayed`: Called when the ad is displayed <br> `onAdFailed`: Called when the ad fails to load <br> `onAdClicked`: Called when the ad is clicked <br> `onAdClosed`: Called when the ad is closed |
+| listener | Callback listener (BwsAdViewListener) | `onAdViewStartLoad`: Called when the ad starts loading <br> `onAdViewLoaded`: Called when the ad is loaded successfully <br> `onAdViewDisplayed`: Called when the ad is displayed <br> `onAdViewFailed`: Called when the ad fails to load <br> `onAdViewClicked`: Called when the ad is clicked <br> `onAdViewClosed`: Called when the ad is closed |
 
 <br>
 
@@ -244,7 +244,7 @@ adApi.createDisplayBannerAd(
 val adApi: InAppApi = InAppApi()
 
 // perform to fetch and load ad
-adApi.createStickyBannerAd(
+adApi.createBwsRightSideStickyAd(
    context = context,
    model = DisplayBannerModel(
        configId = CONFIG_ID,
@@ -253,13 +253,13 @@ adApi.createStickyBannerAd(
        refreshTimeSeconds = 300
    ),
    viewContainer = viewContainer,
-   listener = object: BannerAdListener {
-       override fun onAdStartLoad(bannerView: BannerView?) {}
-       override fun onAdLoaded(bannerView: BannerView?) {}
-       override fun onAdDisplayed(bannerView: BannerView?) {}
-       override fun onAdFailed(bannerView: BannerView?, exception: AdException?) {}
-       override fun onAdClicked(bannerView: BannerView?) {}
-       override fun onAdClosed(bannerView: BannerView?) {}
+   listener = object: BwsAdViewListener {
+       override fun onAdViewStartLoad(bannerView: BwsAdView?) {}
+       override fun onAdViewLoaded(bannerView: BwsAdView?) {}
+       override fun onAdViewDisplayed(bannerView: BwsAdView?) {}
+       override fun onAdViewFailed(bannerView: BwsAdView?, exception: AdException?) {}
+       override fun onAdViewClicked(bannerView: BwsAdView?) {}
+       override fun onAdViewClosed(bannerView: BwsAdView?) {}
    }
 )
 ```
@@ -277,7 +277,7 @@ adApi.createStickyBannerAd(
 | :---        |    :----   |          :--- |
 | context      | Instance of Context        |  -  |
 | model   | Contains information to generate the ad | `ConfigId`: an ID of a Stored Impression on the Bw server  <br>  `refreshTimeSeconds`: refresh time for each `fetchDemand` call in second <br> `width`: Width of the ad <br>  `Height`: Height of the ad  |
-| listener | Callback listener (BannerAdListener) | `onAdStartLoad`: Called when the ad starts loading <br> `onAdLoaded`: Called when the ad is loaded successfully <br> `onAdDisplayed`: Called when the ad is displayed <br> `onAdFailed`: Called when the ad fails to load <br> `onAdClicked`: Called when the ad is clicked <br> `onAdClosed`: Called when the ad is closed |
+| listener | Callback listener (BannerAdListener) | `onAdViewStartLoad`: Called when the ad starts loading <br> `onAdViewLoaded`: Called when the ad is loaded successfully <br> `onAdViewDisplayed`: Called when the ad is displayed <br> `onAdViewFailed`: Called when the ad fails to load <br> `onAdViewClicked`: Called when the ad is clicked <br> `onAdViewClosed`: Called when the ad is closed |
 
 # About
 
