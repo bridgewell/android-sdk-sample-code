@@ -15,7 +15,7 @@
         - [a. Using Maven Central](#a-using-maven-central)
         - [b. Using the .aar file](#b-using-the-aar-file)
     - [2. SDK initialization](#2-sdk-initialization)
-        - [a. Set BW Server](#a-set-bw-server)
+        - [a. Set your account credentials](#a-set-account-credentials)
         - [b. Initialize SDK](#b-initialize-sdk)
         - [c. Geolocation sharing](#c-share-geo-location)
     - [3. Update Your Android Manifest](#3-update-your-android-manifest)
@@ -74,14 +74,13 @@ dependencies {
 <a id="2-sdk-initialization"></a>
 ### 2. SDK initialization
 
-<a id="a-set-bw-server"></a>
-#### a. Set the BW Server
+<a id="a-set-account-credentials"></a>
+#### a. Set your account credentials
 
 After obtaining a BW server (e.g., the Rubicon Server), add its details to BW Mobile:
 
 ```kotlin
 BWMobile.getInstance().setAccountId("YOUR_ACCOUNT_ID")
-BWMobile.getInstance().setHostServer("YOUR_HOST_SERVER")
 ```
 
 
