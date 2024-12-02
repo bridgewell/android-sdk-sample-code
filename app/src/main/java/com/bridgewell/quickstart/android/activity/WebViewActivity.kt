@@ -44,7 +44,7 @@ class WebViewActivity : AppCompatActivity() {
     @SuppressLint("NewApi")
     private fun setupWebView() {
         // Register the WebView with the BWMobile SDK
-        BWMobile.getInstance().registerWebView(webView)
+        BWMobile.getInstance().registerContentWebViewWithAdInfo(webView)
 
         // Enable geolocation sharing for the WebView
         BWMobile.getInstance().setShareGeoLocation(true)

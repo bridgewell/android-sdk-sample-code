@@ -28,7 +28,7 @@ class QuickStartApplication : Application() {
         BWMobile.getInstance().initialize(
             this,
             object : OnInitializationListener {
-                override fun onSuccess(hasWarningPBS: Boolean) {
+                override fun onSuccess() {
                     // Called when the SDK is initialized successfully
                     Log.d("BWMobile initialization", "initializeSdk successfully")
                 }

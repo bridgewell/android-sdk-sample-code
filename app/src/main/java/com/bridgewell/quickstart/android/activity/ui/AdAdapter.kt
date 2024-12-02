@@ -11,9 +11,10 @@ class AdAdapter(
 ) : RecyclerView.Adapter<AdAdapter.AdTypeViewHolder>() {
 
     private val list: List<AdType> = listOf(
-        AdType.BANNER,
+        AdType.POP_UP_AD,
         AdType.STICKY_BOTTOM_RIGHT,
-        AdType.WEB_VIEW
+        AdType.MOBILE_STICKY_BOTTOM,
+        AdType.BANNER
     )
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AdTypeViewHolder {

@@ -1,16 +1,15 @@
 package com.bridgewell.quickstart.android.activity
 
 import android.os.Bundle
-import android.view.ViewGroup
 import android.widget.Button
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bridgewell.bwmobile.ads.inapp.InAppApi
-import com.bridgewell.bwmobile.ads.inapp.listener.BannerAdListener
-import com.bridgewell.bwmobile.model.DisplayBannerModel
+import com.bridgewell.bwmobile.ads.inapp.listener.BwsAdViewListener
+import com.bridgewell.bwmobile.ads.inapp.model.BwsAdView
 import com.bridgewell.quickstart.android.R
+import com.bridgewell.quickstart.android.utils.showToast
 import org.prebid.mobile.api.exceptions.AdException
-import org.prebid.mobile.api.rendering.BannerView
+import timber.log.Timber
 
 class InAppStickyBottomRightAdActivity : AppCompatActivity() {
 
@@ -32,42 +31,45 @@ class InAppStickyBottomRightAdActivity : AppCompatActivity() {
     }
 
     private fun loadAd() {
-        inAppApi.createStickyBannerAd(
+        inAppApi.createBwsMobileStickyAd(
             this,
-            model =
-            DisplayBannerModel(
-                configId = CONFIG_ID,
-                width = 300,
-                height = 300,
-                refreshTimeSeconds = 3000,
-            ),
+            configID = CONFIG_ID,
+            bottomMargin = 12,
+            refreshTimeSeconds = 300,
             listener =
-            object : BannerAdListener {
-                override fun onAdStartLoad(bannerView: BannerView?) {
-                    // Called when the ad starts loading
+            object : BwsAdViewListener {
+                override fun onAdViewStartLoad(bannerView: BwsAdView?) {
+                    showToast("onAdStartLoad")
                 }
 
-                override fun onAdLoaded(bannerView: BannerView?) {
-                    // Called when the ad is loaded successfully
-                    Toast.makeText(this@InAppStickyBottomRightAdActivity, "Ad loaded", Toast.LENGTH_SHORT).show()
+                override fun onAdViewLoaded(bannerView: BwsAdView?) {
+                    showToast("onAdLoaded")
                 }
 
-                override fun onAdDisplayed(bannerView: BannerView?) {
-                    // Called when the ad is displayed
-                    Toast.makeText(this@InAppStickyBottomRightAdActivity, "Ad displayed", Toast.LENGTH_SHORT).show()
+                override fun onAdViewDisplayed(bannerView: BwsAdView?) {
+                    showToast("onAdDisplayed")
                 }
 
-                override fun onAdFailed(bannerView: BannerView?, exception: AdException?) {
-                    // Called when the ad fails to load
+                override fun onAdViewFailed(
+                    bannerView: BwsAdView?,
+                    exception: AdException?,
+                ) {
+                    showToast("onAdFailed ${exception?.message}")
+                    Timber.d("onAdFailed ${exception?.message}")
                 }
 
-                override fun onAdClicked(bannerView: BannerView?) {
-                    // Called when the ad is clicked
+                override fun onAdViewClicked(bannerView: BwsAdView?) {
+                    showToast("onAdClicked")
                 }
 
-                override fun onAdClosed(bannerView: BannerView?) {
-                    // Called when the ad is closed
+                override fun onAdModalBrowserClosed(bannerView: BwsAdView?) {
+                    showToast("onAdModalBrowserClosed")
                 }
-            },)
+
+                override fun onAdViewClosed() {
+                    showToast("onAdViewClosed")
+                }
+            },
+        )
     }
 }

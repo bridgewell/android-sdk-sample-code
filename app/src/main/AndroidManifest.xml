@@ -36,6 +36,9 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".activity.TabbedViewActivity"
+            android:exported="true" />
+        <activity
             android:name=".activity.InAppBannerAdActivity"
             android:exported="true" />
         <activity

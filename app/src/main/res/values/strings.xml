@@ -1,10 +1,13 @@
 <resources>
     <string name="app_name">BW SDK QuickStart Sample</string>
-    <string name="in_app_banner_ad_implementation">In-app banner ad</string>
-    <string name="in_app_sticky_bottom_right_ad_implementation">In-app Sticky Bottom-Right ad</string>
+    <string name="in_app_pop_up_ad_implementation">PopAd 1:1</string>
+    <string name="in_app_sticky_bottom_right_ad_implementation">RightSideStickyAd 1:1</string>
+    <string name="in_app_sticky_bottom_ad_implementation">MobileStickyAd 320x50</string>
+    <string name="in_app_banner_ad_implementation">BannerAd 300x250</string>
     <string name="web_view_api_usage">WebView API usage</string>
-    <string name="button_load_banner">Load banner ad</string>
+    <string name="button_load_pop_up_banner">Load Pop-up banner</string>
+    <string name="button_load_right_side_banner">Load right side sticky banner</string>
     <string name="button_load_sticky_banner">Load sticky bottom banner</string>
+    <string name="button_load_banner">Load banner ad</string>
     <string name="button_web_view_inject">WebView API usage</string>
-
 </resources>

@@ -39,20 +39,32 @@ class MainActivity : AppCompatActivity() {
         // Create the AdAdapter and handle item clicks
         adAdapter = AdAdapter { adType ->
             when (adType) {
-                AdType.BANNER -> {
-                    val intent = Intent(this, InAppBannerAdActivity::class.java)
+                AdType.POP_UP_AD -> {
+                    val intent = Intent(this, TabbedViewActivity::class.java)
                     startActivity(intent)
                 }
 
                 AdType.STICKY_BOTTOM_RIGHT -> {
-                    val intent = Intent(this, InAppStickyBottomRightAdActivity::class.java)
+                    val intent = Intent(this, TabbedViewActivity::class.java)
                     startActivity(intent)
                 }
 
-                AdType.WEB_VIEW -> {
-                    val intent = Intent(this, WebViewActivity::class.java)
+                AdType.BANNER -> {
+                    val intent = Intent(this, TabbedViewActivity::class.java)
                     startActivity(intent)
                 }
+
+                AdType.MOBILE_STICKY_BOTTOM -> {
+                    val intent = Intent(this, TabbedViewActivity::class.java)
+                    startActivity(intent)
+                }
+
+
+
+//                AdType.WEB_VIEW -> {
+//                    val intent = Intent(this, WebViewActivity::class.java)
+//                    startActivity(intent)
+//                }
             }
         }
         binding.rvList.adapter = adAdapter
