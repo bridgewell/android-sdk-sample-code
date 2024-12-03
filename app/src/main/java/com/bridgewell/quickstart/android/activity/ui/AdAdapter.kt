@@ -43,7 +43,7 @@ class AdAdapter(
 
         fun bind(adType: AdType) {
             this.adType = adType
-            binding.tvName.text = itemView.context.getString(adType.titleStringRes)
+            binding.adTypeTextView.text = itemView.context.getString(adType.titleStringRes)
         }
 
         fun setOnItemClickedListener(onItemClicked: (AdType) -> Unit) {
