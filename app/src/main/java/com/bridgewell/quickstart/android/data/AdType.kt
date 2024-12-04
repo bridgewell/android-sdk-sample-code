@@ -7,6 +7,4 @@ enum class AdType(val titleStringRes: Int) {
     STICKY_BOTTOM_RIGHT(R.string.in_app_sticky_bottom_right_ad_implementation),
     MOBILE_STICKY_BOTTOM(R.string.in_app_sticky_bottom_right_ad_implementation),
     BANNER(R.string.in_app_banner_ad_implementation)
-
-//    WEB_VIEW(R.string.web_view_api_usage)
 }
