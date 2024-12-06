@@ -22,7 +22,8 @@ import timber.log.Timber
 class TabbedViewActivity : AppCompatActivity() {
 
     companion object {
-        const val CONFIG_ID = "dev-bws-banner-ad"
+        const val CONFIG_ID_BANNER = "dev-bws-banner-ad"
+        const val CONFIG_ID_MOBILE_STICKY_BOTTOM = "dev-bws-mobile-sticky-ad"
     }
 
     private val inAppApi = InAppApi()
@@ -73,78 +74,82 @@ class TabbedViewActivity : AppCompatActivity() {
         // Parse the index back to the AdType enum
         val selectedAdType = AdType.entries[selectedTabIndex]
 
-        // Use selectedAdType in your when statement
-        when (selectedAdType) {
+
+        createAd(selectedAdType)
+    }
+
+    private fun createAd(adType: AdType) {
+        val listener = object : BwsAdViewListener { // Common listener
+            override fun onAdViewStartLoad(bannerView: BwsAdView?) {
+                showToast("onAdStartLoad")
+            }
+
+            override fun onAdViewLoaded(bannerView: BwsAdView?) {
+                showToast("onAdLoaded")
+            }
+
+            override fun onAdViewDisplayed(bannerView: BwsAdView?) {
+                showToast("onAdDisplayed")
+            }
+
+            override fun onAdViewFailed(bannerView: BwsAdView?, exception: AdException?) {
+                showToast("onAdFailed ${exception?.message}")
+                Timber.d("onAdFailed ${exception?.message}")
+            }
+
+            override fun onAdViewClicked(bannerView: BwsAdView?) {
+                showToast("onAdClicked")
+            }
+
+            override fun onAdModalBrowserClosed(bannerView: BwsAdView?) {
+                showToast("onAdModalBrowserClosed")
+            }
+
+            override fun onAdViewClosed() {
+                showToast("onAdViewClosed")
+            }
+        }
+
+        when (adType) {
             AdType.POP_UP_AD -> {
-                // Handle PopUpAd
+                inAppApi.createBwsPopupAd(
+                    this,
+                    configID = CONFIG_ID_BANNER,
+                    refreshTimeSeconds = 0,
+                    listener = listener
+                )
             }
             AdType.STICKY_BOTTOM_RIGHT -> {
-                // Handle StickyBottomRight
+                inAppApi.createBwsRightSideStickyAd(
+                    this,
+                    configID = CONFIG_ID_BANNER,
+                    bottomMargin = 77,
+                    refreshTimeSeconds = 0,
+                    listener = listener
+                )
             }
             AdType.BANNER -> {
-                // Handle Banner
-                createBannerAd()
+                val adWrapperView = findViewById<FrameLayout>(R.id.frameAdWrapper)
+                inAppApi.createBwsBannerAd(
+                    this,
+                    configID = CONFIG_ID_BANNER,
+                    width = adWrapperView.width,
+                    height = adWrapperView.height,
+                    viewContainer = adWrapperView,
+                    listener = listener
+                )
             }
             AdType.MOBILE_STICKY_BOTTOM -> {
-                // Handle MobileStickyBottom
+                inAppApi.createBwsMobileStickyAd(
+                    this,
+                    configID = CONFIG_ID_MOBILE_STICKY_BOTTOM,
+                    bottomMargin = 65,
+                    refreshTimeSeconds = 0,
+                    listener = listener
+                )
             }
         }
     }
-
-    private fun createMobileStickyBottomAd() {
-    }
-
-    private fun createPopUpAd() {
-    }
-
-    private fun createStickyBottomRightAd() {
-    }
-
-    private fun createBannerAd() {
-        val adWrapperView = findViewById<FrameLayout>(R.id.frameAdWrapper)
-        inAppApi.createBwsBannerAd(
-            this,
-            configID = CONFIG_ID,
-            width = adWrapperView.width,
-            height = adWrapperView.height,
-            viewContainer = adWrapperView,
-            listener =
-            object : BwsAdViewListener {
-                override fun onAdViewStartLoad(bannerView: BwsAdView?) {
-                    Timber.d("onAdViewStartLoad Banner config = ${BannerViewUtils.getConfigIdFromBannerView(bannerView)}")
-                    Timber.d("onAdViewStartLoad Banner size = ${bannerView?.size}")
-
-                    showToast("onAdStartLoad")
-                }
-
-                override fun onAdViewLoaded(bannerView: BwsAdView?) {
-                    showToast("onAdLoaded")
-                }
-
-                override fun onAdViewDisplayed(bannerView: BwsAdView?) {
-                    showToast("onAdDisplayed")
-                }
-
-                override fun onAdViewFailed(bannerView: BwsAdView?, exception: AdException?) {
-                    showToast("onAdFailed ${exception?.message}")
-                    Timber.e("onAdFailed ${exception?.message}")
-                }
-
-                override fun onAdViewClicked(bannerView: BwsAdView?) {
-                    showToast("onAdClicked")
-                }
-
-                override fun onAdModalBrowserClosed(bannerView: BwsAdView?) {
-                    showToast("onAdModalBrowserClosed")
-                }
-
-                override fun onAdViewClosed() {
-                    showToast("onAdViewClosed")
-                }
-            },
-        )
-    }
-
 
     override fun onDestroy() {
         super.onDestroy()

@@ -5,7 +5,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.bridgewell.quickstart.android.activity.ui.AdAdapter
-import com.bridgewell.quickstart.android.data.AdType
 import com.bridgewell.quickstart.android.databinding.ActivityMainBinding
 
 
