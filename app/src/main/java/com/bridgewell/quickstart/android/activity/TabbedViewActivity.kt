@@ -3,19 +3,19 @@ package com.bridgewell.quickstart.android.activity
 import android.os.Bundle
 import android.widget.FrameLayout
 import android.widget.ImageButton
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.size
 import androidx.viewpager2.widget.ViewPager2
 import com.bridgewell.bwmobile.ads.inapp.InAppApi
 import com.bridgewell.bwmobile.ads.inapp.listener.BwsAdViewListener
 import com.bridgewell.bwmobile.ads.inapp.model.BwsAdView
-import com.bridgewell.bwmobile.utils.BannerViewUtils
 import com.bridgewell.quickstart.android.R
 import com.bridgewell.quickstart.android.activity.ui.adapter.TabbedViewAdapter
 import com.bridgewell.quickstart.android.data.AdType
 import com.bridgewell.quickstart.android.utils.showToast
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import koleton.api.loadSkeleton
 import org.prebid.mobile.api.exceptions.AdException
 import timber.log.Timber
 
@@ -28,10 +28,14 @@ class TabbedViewActivity : AppCompatActivity() {
 
     private val inAppApi = InAppApi()
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tabbed_view)
+        for (i in 1..12) {
+            val imageViewId = resources.getIdentifier("imageView$i", "id", packageName)
+            val imageView = findViewById<ImageView>(imageViewId)
+            imageView.loadSkeleton {  }
+        }
 
         val tabLayout = findViewById<TabLayout>(R.id.tabLayout)
         val viewPager = findViewById<ViewPager2>(R.id.viewPager)
@@ -73,7 +77,6 @@ class TabbedViewActivity : AppCompatActivity() {
 
         // Parse the index back to the AdType enum
         val selectedAdType = AdType.entries[selectedTabIndex]
-
 
         createAd(selectedAdType)
     }

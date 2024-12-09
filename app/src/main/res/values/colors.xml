@@ -10,4 +10,6 @@
     <color name="background">#fff</color>
     <color name="background_inverse">#000</color>
     <color name="gray">#969696</color>
+    <color name="skeleton_gray_1">#DADADA</color>
+    <color name="skeleton_gray_2">#F5F5F5</color>
 </resources>
