@@ -1,9 +1,11 @@
 package com.bridgewell.quickstart.android.activity
 
 import android.os.Bundle
+import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.bridgewell.bwmobile.ads.inapp.InAppApi
@@ -15,6 +17,7 @@ import com.bridgewell.quickstart.android.data.AdType
 import com.bridgewell.quickstart.android.utils.showToast
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import koleton.api.hideSkeleton
 import koleton.api.loadSkeleton
 import org.prebid.mobile.api.exceptions.AdException
 import timber.log.Timber
@@ -31,11 +34,6 @@ class TabbedViewActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tabbed_view)
-        for (i in 1..12) {
-            val imageViewId = resources.getIdentifier("imageView$i", "id", packageName)
-            val imageView = findViewById<ImageView>(imageViewId)
-            imageView.loadSkeleton {  }
-        }
 
         val tabLayout = findViewById<TabLayout>(R.id.tabLayout)
         val viewPager = findViewById<ViewPager2>(R.id.viewPager)
@@ -78,10 +76,28 @@ class TabbedViewActivity : AppCompatActivity() {
         // Parse the index back to the AdType enum
         val selectedAdType = AdType.entries[selectedTabIndex]
 
+        for (i in 1..17) {
+            val imageViewId = resources.getIdentifier("imageView$i", "id", packageName)
+            val imageView = findViewById<ImageView>(imageViewId)
+            val skeletonColor = when (i) {
+                1, 2, 5, 6, 11, 10 -> R.color.skeleton_gray_1
+                else -> R.color.skeleton_gray_2
+            }
+            imageView.loadSkeleton {
+                color(skeletonColor)
+                cornerRadius(4F)
+            }
+        }
+
         createAd(selectedAdType)
     }
 
     private fun createAd(adType: AdType) {
+        if (adType == AdType.BANNER) {
+            val imageViewBanner = findViewById<ImageView>(R.id.imageView1)
+            imageViewBanner.hideSkeleton()
+        }
+
         val listener = object : BwsAdViewListener { // Common listener
             override fun onAdViewStartLoad(bannerView: BwsAdView?) {
                 showToast("onAdStartLoad")
@@ -131,7 +147,30 @@ class TabbedViewActivity : AppCompatActivity() {
                     listener = listener
                 )
             }
+            AdType.MOBILE_STICKY_BOTTOM -> {
+                inAppApi.createBwsMobileStickyAd(
+                    this,
+                    configID = CONFIG_ID_MOBILE_STICKY_BOTTOM,
+                    bottomMargin = 65,
+                    refreshTimeSeconds = 0,
+                    listener = listener
+                )
+            }
             AdType.BANNER -> {
+                val skeletonContainer = findViewById<LinearLayout>(R.id.topSkeletonContainer)
+                skeletonContainer.visibility = View.VISIBLE
+                for (i in 1..6) {
+                    val imageViewId = resources.getIdentifier("topImageView$i", "id", packageName)
+                    val imageView = findViewById<ImageView>(imageViewId)
+                    val skeletonColor = when (i) {
+                        1, 2 -> R.color.skeleton_gray_1
+                        else -> R.color.skeleton_gray_2
+                    }
+                    imageView.loadSkeleton {
+                        color(skeletonColor)
+                        cornerRadius(4F)
+                    }
+                }
                 val adWrapperView = findViewById<FrameLayout>(R.id.frameAdWrapper)
                 inAppApi.createBwsBannerAd(
                     this,
@@ -139,15 +178,6 @@ class TabbedViewActivity : AppCompatActivity() {
                     width = adWrapperView.width,
                     height = adWrapperView.height,
                     viewContainer = adWrapperView,
-                    listener = listener
-                )
-            }
-            AdType.MOBILE_STICKY_BOTTOM -> {
-                inAppApi.createBwsMobileStickyAd(
-                    this,
-                    configID = CONFIG_ID_MOBILE_STICKY_BOTTOM,
-                    bottomMargin = 65,
-                    refreshTimeSeconds = 0,
                     listener = listener
                 )
             }
