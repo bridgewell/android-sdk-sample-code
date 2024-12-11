@@ -142,7 +142,6 @@ class TabbedViewActivity : AppCompatActivity() {
                 inAppApi.createBwsRightSideStickyAd(
                     this,
                     configID = CONFIG_ID_BANNER,
-                    bottomMargin = 77,
                     refreshTimeSeconds = 0,
                     listener = listener
                 )
