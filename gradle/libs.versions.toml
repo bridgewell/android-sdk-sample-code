@@ -1,0 +1,40 @@
+[versions]
+agp = "8.5.0"
+gson = "2.10.1"
+koleton = "1.0.0-beta01"
+kotlin = "1.9.0"
+coreKtx = "1.10.1"
+junit = "4.13.2"
+junitVersion = "1.2.1"
+espressoCore = "3.6.1"
+appcompat = "1.7.0"
+activity = "1.9.2"
+bwmobile = "1.3.0"
+constraintlayout = "2.1.4"
+materialVersion = "1.9.0"
+playServicesAds = "23.4.0"
+rxjava = "3.1.6"
+rxpermissions = "v0.12"
+viewpager2 = "1.1.0"
+
+[libraries]
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-viewpager2 = { module = "androidx.viewpager2:viewpager2", version.ref = "viewpager2" }
+bwmobile = { module = "com.bridgewell:bwmobile", version.ref = "bwmobile" }
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+koleton = { module = "com.ericktijerou.koleton:koleton", version.ref = "koleton" }
+material-v190 = { module = "com.google.android.material:material", version.ref = "materialVersion" }
+play-services-ads = { module = "com.google.android.gms:play-services-ads", version.ref = "playServicesAds" }
+rxjava = { module = "io.reactivex.rxjava3:rxjava", version.ref = "rxjava" }
+rxpermissions = { module = "com.github.tbruyelle:rxpermissions", version.ref = "rxpermissions" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+
