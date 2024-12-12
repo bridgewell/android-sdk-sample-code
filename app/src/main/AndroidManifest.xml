@@ -38,14 +38,5 @@
         <activity
             android:name=".activity.TabbedViewActivity"
             android:exported="true" />
-        <activity
-            android:name=".activity.InAppBannerAdActivity"
-            android:exported="true" />
-        <activity
-            android:name=".activity.InAppStickyBottomRightAdActivity"
-            android:exported="true" />
-        <activity
-            android:name=".activity.WebViewActivity"
-            android:exported="true" />
     </application>
 </manifest>
