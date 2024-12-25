@@ -7,6 +7,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.bridgewell.bwmobile.ads.inapp.InAppApi
 import com.bridgewell.bwmobile.ads.inapp.listener.BwsAdViewListener
@@ -18,7 +19,6 @@ import com.bridgewell.quickstart.android.utils.showToast
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import koleton.api.hideSkeleton
-import koleton.api.loadSkeleton
 import org.prebid.mobile.api.exceptions.AdException
 import timber.log.Timber
 
@@ -83,10 +83,8 @@ class TabbedViewActivity : AppCompatActivity() {
                 1, 2, 5, 6, 11, 10 -> R.color.skeleton_gray_1
                 else -> R.color.skeleton_gray_2
             }
-            imageView.loadSkeleton {
-                color(skeletonColor)
-                cornerRadius(4F)
-            }
+
+            imageView.setBackgroundColor(ContextCompat.getColor(this, skeletonColor))
         }
 
         createAd(selectedAdType)
@@ -142,6 +140,7 @@ class TabbedViewActivity : AppCompatActivity() {
                 inAppApi.createBwsRightSideStickyAd(
                     this,
                     configID = CONFIG_ID_BANNER,
+                    bottomMargin = 77,
                     refreshTimeSeconds = 0,
                     listener = listener
                 )
@@ -165,10 +164,7 @@ class TabbedViewActivity : AppCompatActivity() {
                         1, 2 -> R.color.skeleton_gray_1
                         else -> R.color.skeleton_gray_2
                     }
-                    imageView.loadSkeleton {
-                        color(skeletonColor)
-                        cornerRadius(4F)
-                    }
+                    imageView.setBackgroundColor(ContextCompat.getColor(this, skeletonColor))
                 }
                 val adWrapperView = findViewById<FrameLayout>(R.id.frameAdWrapper)
                 inAppApi.createBwsBannerAd(
