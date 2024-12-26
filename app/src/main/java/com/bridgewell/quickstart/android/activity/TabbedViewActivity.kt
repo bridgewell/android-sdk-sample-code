@@ -26,7 +26,9 @@ class TabbedViewActivity : AppCompatActivity() {
 
     companion object {
         const val CONFIG_ID_BANNER = "dev-bws-banner-ad"
-        const val CONFIG_ID_MOBILE_STICKY_BOTTOM = "dev-bws-mobile-sticky-ad"
+        const val CONFIG_ID_POP_UP = "dev-bws-popup-ad"
+        const val CONFIG_ID_RIGHT_SIDE_STICKY = "dev-bws-right-side-sticky-ad"
+        const val CONFIG_ID_MOBILE_STICKY = "dev-bws-mobile-sticky-ad"
     }
 
     private val inAppApi = InAppApi()
@@ -131,7 +133,7 @@ class TabbedViewActivity : AppCompatActivity() {
             AdType.POP_UP_AD -> {
                 inAppApi.createBwsPopupAd(
                     this,
-                    configID = CONFIG_ID_BANNER,
+                    configID = CONFIG_ID_POP_UP,
                     refreshTimeSeconds = 0,
                     listener = listener
                 )
@@ -139,7 +141,7 @@ class TabbedViewActivity : AppCompatActivity() {
             AdType.STICKY_BOTTOM_RIGHT -> {
                 inAppApi.createBwsRightSideStickyAd(
                     this,
-                    configID = CONFIG_ID_BANNER,
+                    configID = CONFIG_ID_RIGHT_SIDE_STICKY,
                     bottomMargin = 77,
                     refreshTimeSeconds = 0,
                     listener = listener
@@ -148,7 +150,7 @@ class TabbedViewActivity : AppCompatActivity() {
             AdType.MOBILE_STICKY_BOTTOM -> {
                 inAppApi.createBwsMobileStickyAd(
                     this,
-                    configID = CONFIG_ID_MOBILE_STICKY_BOTTOM,
+                    configID = CONFIG_ID_MOBILE_STICKY,
                     bottomMargin = 65,
                     refreshTimeSeconds = 0,
                     listener = listener
