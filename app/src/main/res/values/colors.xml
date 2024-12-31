@@ -12,4 +12,6 @@
     <color name="gray">#969696</color>
     <color name="skeleton_gray_1">#DADADA</color>
     <color name="skeleton_gray_2">#F5F5F5</color>
+    <color name="tab_gray_selected">#4F4F4F</color>
+    <color name="tab_gray_normal">#A5A5A5</color>
 </resources>

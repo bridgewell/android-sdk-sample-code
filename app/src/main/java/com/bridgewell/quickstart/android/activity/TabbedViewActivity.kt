@@ -7,6 +7,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.bridgewell.bwmobile.ads.inapp.InAppApi
 import com.bridgewell.bwmobile.ads.inapp.listener.BwsAdViewListener
@@ -18,7 +19,6 @@ import com.bridgewell.quickstart.android.utils.showToast
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import koleton.api.hideSkeleton
-import koleton.api.loadSkeleton
 import org.prebid.mobile.api.exceptions.AdException
 import timber.log.Timber
 
@@ -26,7 +26,9 @@ class TabbedViewActivity : AppCompatActivity() {
 
     companion object {
         const val CONFIG_ID_BANNER = "dev-bws-banner-ad"
-        const val CONFIG_ID_MOBILE_STICKY_BOTTOM = "dev-bws-mobile-sticky-ad"
+        const val CONFIG_ID_POP_UP = "dev-bws-popup-ad"
+        const val CONFIG_ID_RIGHT_SIDE_STICKY = "dev-bws-right-side-sticky-ad"
+        const val CONFIG_ID_MOBILE_STICKY = "dev-bws-mobile-sticky-ad"
     }
 
     private val inAppApi = InAppApi()
@@ -83,10 +85,8 @@ class TabbedViewActivity : AppCompatActivity() {
                 1, 2, 5, 6, 11, 10 -> R.color.skeleton_gray_1
                 else -> R.color.skeleton_gray_2
             }
-            imageView.loadSkeleton {
-                color(skeletonColor)
-                cornerRadius(4F)
-            }
+
+            imageView.setBackgroundColor(ContextCompat.getColor(this, skeletonColor))
         }
 
         createAd(selectedAdType)
@@ -133,7 +133,7 @@ class TabbedViewActivity : AppCompatActivity() {
             AdType.POP_UP_AD -> {
                 inAppApi.createBwsPopupAd(
                     this,
-                    configID = CONFIG_ID_BANNER,
+                    configID = CONFIG_ID_POP_UP,
                     refreshTimeSeconds = 0,
                     listener = listener
                 )
@@ -141,7 +141,8 @@ class TabbedViewActivity : AppCompatActivity() {
             AdType.STICKY_BOTTOM_RIGHT -> {
                 inAppApi.createBwsRightSideStickyAd(
                     this,
-                    configID = CONFIG_ID_BANNER,
+                    configID = CONFIG_ID_RIGHT_SIDE_STICKY,
+                    bottomMargin = 77,
                     refreshTimeSeconds = 0,
                     listener = listener
                 )
@@ -149,7 +150,7 @@ class TabbedViewActivity : AppCompatActivity() {
             AdType.MOBILE_STICKY_BOTTOM -> {
                 inAppApi.createBwsMobileStickyAd(
                     this,
-                    configID = CONFIG_ID_MOBILE_STICKY_BOTTOM,
+                    configID = CONFIG_ID_MOBILE_STICKY,
                     bottomMargin = 65,
                     refreshTimeSeconds = 0,
                     listener = listener
@@ -165,10 +166,7 @@ class TabbedViewActivity : AppCompatActivity() {
                         1, 2 -> R.color.skeleton_gray_1
                         else -> R.color.skeleton_gray_2
                     }
-                    imageView.loadSkeleton {
-                        color(skeletonColor)
-                        cornerRadius(4F)
-                    }
+                    imageView.setBackgroundColor(ContextCompat.getColor(this, skeletonColor))
                 }
                 val adWrapperView = findViewById<FrameLayout>(R.id.frameAdWrapper)
                 inAppApi.createBwsBannerAd(

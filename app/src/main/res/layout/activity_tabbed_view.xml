@@ -130,7 +130,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintDimensionRatio="1:1"
+                            app:layout_constraintDimensionRatio="6:5"
                             app:layout_constraintTop_toTopOf="parent">
                             <ImageView
                                 android:id="@+id/imageView1"
@@ -338,9 +338,11 @@
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:tabGravity="fill"
-            app:tabMode="fixed" />
+            app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
+            app:tabIconTint="@drawable/tab_icon"
+            app:tabIndicatorColor="@color/tab_gray_selected"
+            app:tabTextColor="@color/tab_gray_normal"
+            app:tabSelectedTextColor="@color/tab_gray_selected"/>
 
     </com.google.android.material.appbar.AppBarLayout>
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
