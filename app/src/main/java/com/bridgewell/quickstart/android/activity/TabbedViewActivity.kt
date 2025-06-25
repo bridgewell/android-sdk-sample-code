@@ -25,10 +25,16 @@ import timber.log.Timber
 class TabbedViewActivity : AppCompatActivity() {
 
     companion object {
-        const val CONFIG_ID_BANNER = "dev-bws-banner-ad"
+        const val CONFIG_ID_BANNER = "dev-bws-banner-video-ad-300x250-4_3"
         const val CONFIG_ID_POP_UP = "dev-bws-popup-ad"
         const val CONFIG_ID_RIGHT_SIDE_STICKY = "dev-bws-right-side-sticky-ad"
         const val CONFIG_ID_MOBILE_STICKY = "dev-bws-mobile-sticky-ad"
+
+        const val CONFIG_ID_VIDEO_43 = "dev-bws-banner-video-ad-300x250-4_3"
+        const val CONFIG_ID_VIDEO_169 = "dev-bws-banner-video-ad-300x250-16_9"
+
+        const val CONFIG_ID_VIDEO_POPUP_43 = "dev-bws-popup-video-ad-4_3"
+        const val CONFIG_ID_VIDEO_POPUP_169 = "dev-bws-popup-video-ad-16_9"
     }
 
     private val inAppApi = InAppApi()
@@ -175,6 +181,66 @@ class TabbedViewActivity : AppCompatActivity() {
                     width = adWrapperView.width,
                     height = adWrapperView.height,
                     viewContainer = adWrapperView,
+                    listener = listener
+                )
+            }
+            AdType.VIDEO43 -> {
+                val skeletonContainer = findViewById<LinearLayout>(R.id.topSkeletonContainer)
+                skeletonContainer.visibility = View.VISIBLE
+                for (i in 1..6) {
+                    val imageViewId = resources.getIdentifier("topImageView$i", "id", packageName)
+                    val imageView = findViewById<ImageView>(imageViewId)
+                    val skeletonColor = when (i) {
+                        1, 2 -> R.color.skeleton_gray_1
+                        else -> R.color.skeleton_gray_2
+                    }
+                    imageView.setBackgroundColor(ContextCompat.getColor(this, skeletonColor))
+                }
+                val adWrapperView = findViewById<FrameLayout>(R.id.frameAdWrapper)
+                inAppApi.createBwsBannerAd(
+                    this,
+                    configID = CONFIG_ID_BANNER,
+                    width = adWrapperView.width,
+                    height = adWrapperView.height,
+                    viewContainer = adWrapperView,
+                    listener = listener
+                )
+            }
+            AdType.VIDEO169 -> {
+                val skeletonContainer = findViewById<LinearLayout>(R.id.topSkeletonContainer)
+                skeletonContainer.visibility = View.VISIBLE
+                for (i in 1..6) {
+                    val imageViewId = resources.getIdentifier("topImageView$i", "id", packageName)
+                    val imageView = findViewById<ImageView>(imageViewId)
+                    val skeletonColor = when (i) {
+                        1, 2 -> R.color.skeleton_gray_1
+                        else -> R.color.skeleton_gray_2
+                    }
+                    imageView.setBackgroundColor(ContextCompat.getColor(this, skeletonColor))
+                }
+                val adWrapperView = findViewById<FrameLayout>(R.id.frameAdWrapper)
+                inAppApi.createBwsBannerAd(
+                    this,
+                    configID = CONFIG_ID_BANNER,
+                    width = adWrapperView.width,
+                    height = adWrapperView.height,
+                    viewContainer = adWrapperView,
+                    listener = listener
+                )
+            }
+            AdType.POPUP_VIDEO43 -> {
+                inAppApi.createBwsPopupAd(
+                    this,
+                    configID = CONFIG_ID_POP_UP,
+                    refreshTimeSeconds = 0,
+                    listener = listener
+                )
+            }
+            AdType.POPUP_VIDEO169 -> {
+                inAppApi.createBwsPopupAd(
+                    this,
+                    configID = CONFIG_ID_POP_UP,
+                    refreshTimeSeconds = 0,
                     listener = listener
                 )
             }

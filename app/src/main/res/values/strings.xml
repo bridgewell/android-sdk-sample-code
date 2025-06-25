@@ -10,4 +10,8 @@
     <string name="button_load_sticky_banner">Load sticky bottom banner</string>
     <string name="button_load_banner">Load banner ad</string>
     <string name="button_web_view_inject">WebView API usage</string>
+    <string name="video_43">BwsBannerAd_Video 4:3</string>
+    <string name="video_169">BwsBannerAd_Video 16:9</string>
+    <string name="popup_video_43">BwsPopupAd_Video 4:3</string>
+    <string name="popup_video_169">BwsPopupAd_Video 16:9</string>
 </resources>
