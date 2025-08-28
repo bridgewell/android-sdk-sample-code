@@ -10,8 +10,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.bridgewell.bwmobile.ads.inapp.InAppApi
+import com.bridgewell.bwmobile.ads.inapp.view.BwsAdView
 import com.bridgewell.bwmobile.ads.inapp.listener.BwsAdViewListener
-import com.bridgewell.bwmobile.ads.inapp.model.BwsAdView
 import com.bridgewell.quickstart.android.R
 import com.bridgewell.quickstart.android.activity.ui.adapter.TabbedViewAdapter
 import com.bridgewell.quickstart.android.data.AdType
@@ -20,7 +20,6 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import koleton.api.hideSkeleton
 import org.prebid.mobile.api.exceptions.AdException
-import timber.log.Timber
 
 class TabbedViewActivity : AppCompatActivity() {
 
@@ -119,11 +118,14 @@ class TabbedViewActivity : AppCompatActivity() {
 
             override fun onAdViewFailed(bannerView: BwsAdView?, exception: AdException?) {
                 showToast("onAdFailed ${exception?.message}")
-                Timber.d("onAdFailed ${exception?.message}")
             }
 
-            override fun onAdViewClicked(bannerView: BwsAdView?) {
-                showToast("onAdClicked")
+            override fun onAdViewClicked(
+                bannerView: BwsAdView?,
+                openUrl: String?,
+                linkOpenMethod: String
+            ) {
+                showToast("onAdClicked ${openUrl ?: ""} $linkOpenMethod")
             }
 
             override fun onAdModalBrowserClosed(bannerView: BwsAdView?) {
@@ -197,13 +199,14 @@ class TabbedViewActivity : AppCompatActivity() {
                     imageView.setBackgroundColor(ContextCompat.getColor(this, skeletonColor))
                 }
                 val adWrapperView = findViewById<FrameLayout>(R.id.frameAdWrapper)
-                inAppApi.createBwsBannerAd(
+                inAppApi.createDisplayVideoAd(
                     this,
-                    configID = CONFIG_ID_BANNER,
-                    width = adWrapperView.width,
-                    height = adWrapperView.height,
-                    viewContainer = adWrapperView,
-                    listener = listener
+                    BWVideoView.LayoutType.LAYOUT_4_3,
+                    CONFIG_ID_VIDEO_43,
+                    300,
+                    250,
+                    adWrapperView,
+                    listener
                 )
             }
             AdType.VIDEO169 -> {
@@ -219,29 +222,30 @@ class TabbedViewActivity : AppCompatActivity() {
                     imageView.setBackgroundColor(ContextCompat.getColor(this, skeletonColor))
                 }
                 val adWrapperView = findViewById<FrameLayout>(R.id.frameAdWrapper)
-                inAppApi.createBwsBannerAd(
+                inAppApi.createDisplayVideoAd(
                     this,
-                    configID = CONFIG_ID_BANNER,
-                    width = adWrapperView.width,
-                    height = adWrapperView.height,
-                    viewContainer = adWrapperView,
-                    listener = listener
+                    BWVideoView.LayoutType.LAYOUT_16_9,
+                    CONFIG_ID_VIDEO_169,
+                    300,
+                    250,
+                    adWrapperView,
+                    listener
                 )
             }
             AdType.POPUP_VIDEO43 -> {
-                inAppApi.createBwsPopupAd(
+                inAppApi.createBwsPopupVideoAd(
                     this,
-                    configID = CONFIG_ID_POP_UP,
-                    refreshTimeSeconds = 0,
-                    listener = listener
+                    BWVideoView.LayoutType.LAYOUT_4_3,
+                    CONFIG_ID_VIDEO_POPUP_43,
+                    listener
                 )
             }
             AdType.POPUP_VIDEO169 -> {
-                inAppApi.createBwsPopupAd(
+                inAppApi.createBwsPopupVideoAd(
                     this,
-                    configID = CONFIG_ID_POP_UP,
-                    refreshTimeSeconds = 0,
-                    listener = listener
+                    BWVideoView.LayoutType.LAYOUT_16_9,
+                    CONFIG_ID_VIDEO_POPUP_169,
+                    listener
                 )
             }
         }
