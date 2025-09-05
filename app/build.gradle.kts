@@ -56,6 +56,11 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.viewpager2)
+    implementation(libs.exoplayer)
+    implementation(libs.exoplayer.core)
+    implementation(libs.exoplayer.ui)
+    implementation(libs.extension.ima)
+
     implementation(libs.koleton)
     testImplementation(libs.junit)
 
