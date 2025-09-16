@@ -14,7 +14,11 @@ class AdAdapter(
         AdType.POP_UP_AD,
         AdType.STICKY_BOTTOM_RIGHT,
         AdType.MOBILE_STICKY_BOTTOM,
-        AdType.BANNER
+        AdType.BANNER,
+        AdType.VIDEO43,
+        AdType.VIDEO169,
+        AdType.POPUP_VIDEO43,
+        AdType.POPUP_VIDEO169
     )
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AdTypeViewHolder {

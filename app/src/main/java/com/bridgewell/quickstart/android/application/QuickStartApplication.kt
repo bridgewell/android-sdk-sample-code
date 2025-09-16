@@ -2,7 +2,6 @@ package com.bridgewell.quickstart.android.application
 
 import android.app.Application
 import android.util.Log
-import com.bridgewell.bwmobile.BWMobile
 import com.bridgewell.bwmobile.listener.OnInitializationListener
 import com.bridgewell.bwmobile.model.HostServer
 import com.bridgewell.quickstart.android.data.ConfigData

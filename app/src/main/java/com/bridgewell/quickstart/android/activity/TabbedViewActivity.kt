@@ -10,8 +10,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.bridgewell.bwmobile.ads.inapp.InAppApi
+import com.bridgewell.bwmobile.ads.inapp.view.BwsAdView
 import com.bridgewell.bwmobile.ads.inapp.listener.BwsAdViewListener
-import com.bridgewell.bwmobile.ads.inapp.model.BwsAdView
 import com.bridgewell.quickstart.android.R
 import com.bridgewell.quickstart.android.activity.ui.adapter.TabbedViewAdapter
 import com.bridgewell.quickstart.android.data.AdType
@@ -20,15 +20,20 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import koleton.api.hideSkeleton
 import org.prebid.mobile.api.exceptions.AdException
-import timber.log.Timber
 
 class TabbedViewActivity : AppCompatActivity() {
 
     companion object {
-        const val CONFIG_ID_BANNER = "dev-bws-banner-ad"
+        const val CONFIG_ID_BANNER = "dev-bws-banner-video-ad-300x250-4_3"
         const val CONFIG_ID_POP_UP = "dev-bws-popup-ad"
         const val CONFIG_ID_RIGHT_SIDE_STICKY = "dev-bws-right-side-sticky-ad"
         const val CONFIG_ID_MOBILE_STICKY = "dev-bws-mobile-sticky-ad"
+
+        const val CONFIG_ID_VIDEO_43 = "dev-bws-banner-video-ad-300x250-4_3"
+        const val CONFIG_ID_VIDEO_169 = "dev-bws-banner-video-ad-300x250-16_9"
+
+        const val CONFIG_ID_VIDEO_POPUP_43 = "dev-bws-popup-video-ad-4_3"
+        const val CONFIG_ID_VIDEO_POPUP_169 = "dev-bws-popup-video-ad-16_9"
     }
 
     private val inAppApi = InAppApi()
@@ -113,11 +118,14 @@ class TabbedViewActivity : AppCompatActivity() {
 
             override fun onAdViewFailed(bannerView: BwsAdView?, exception: AdException?) {
                 showToast("onAdFailed ${exception?.message}")
-                Timber.d("onAdFailed ${exception?.message}")
             }
 
-            override fun onAdViewClicked(bannerView: BwsAdView?) {
-                showToast("onAdClicked")
+            override fun onAdViewClicked(
+                bannerView: BwsAdView?,
+                openUrl: String?,
+                linkOpenMethod: String
+            ) {
+                showToast("onAdClicked ${openUrl ?: ""} $linkOpenMethod")
             }
 
             override fun onAdModalBrowserClosed(bannerView: BwsAdView?) {
@@ -176,6 +184,68 @@ class TabbedViewActivity : AppCompatActivity() {
                     height = adWrapperView.height,
                     viewContainer = adWrapperView,
                     listener = listener
+                )
+            }
+            AdType.VIDEO43 -> {
+                val skeletonContainer = findViewById<LinearLayout>(R.id.topSkeletonContainer)
+                skeletonContainer.visibility = View.VISIBLE
+                for (i in 1..6) {
+                    val imageViewId = resources.getIdentifier("topImageView$i", "id", packageName)
+                    val imageView = findViewById<ImageView>(imageViewId)
+                    val skeletonColor = when (i) {
+                        1, 2 -> R.color.skeleton_gray_1
+                        else -> R.color.skeleton_gray_2
+                    }
+                    imageView.setBackgroundColor(ContextCompat.getColor(this, skeletonColor))
+                }
+                val adWrapperView = findViewById<FrameLayout>(R.id.frameAdWrapper)
+                inAppApi.createDisplayVideoAd(
+                    this,
+                    BWVideoView.LayoutType.LAYOUT_4_3,
+                    CONFIG_ID_VIDEO_43,
+                    300,
+                    250,
+                    adWrapperView,
+                    listener
+                )
+            }
+            AdType.VIDEO169 -> {
+                val skeletonContainer = findViewById<LinearLayout>(R.id.topSkeletonContainer)
+                skeletonContainer.visibility = View.VISIBLE
+                for (i in 1..6) {
+                    val imageViewId = resources.getIdentifier("topImageView$i", "id", packageName)
+                    val imageView = findViewById<ImageView>(imageViewId)
+                    val skeletonColor = when (i) {
+                        1, 2 -> R.color.skeleton_gray_1
+                        else -> R.color.skeleton_gray_2
+                    }
+                    imageView.setBackgroundColor(ContextCompat.getColor(this, skeletonColor))
+                }
+                val adWrapperView = findViewById<FrameLayout>(R.id.frameAdWrapper)
+                inAppApi.createDisplayVideoAd(
+                    this,
+                    BWVideoView.LayoutType.LAYOUT_16_9,
+                    CONFIG_ID_VIDEO_169,
+                    300,
+                    250,
+                    adWrapperView,
+                    listener
+                )
+            }
+            AdType.POPUP_VIDEO43 -> {
+                inAppApi.createBwsPopupVideoAd(
+                    this,
+                    BWVideoView.LayoutType.LAYOUT_4_3,
+                    CONFIG_ID_VIDEO_POPUP_43,
+                    listener
+                )
+            }
+            AdType.POPUP_VIDEO169 -> {
+                inAppApi.createBwsPopupVideoAd(
+                    this,
+                    BWVideoView.LayoutType.LAYOUT_16_9,
+                    CONFIG_ID_VIDEO_POPUP_169,
+                    listener
                 )
             }
         }
